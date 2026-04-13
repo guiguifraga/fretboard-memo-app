@@ -11,10 +11,10 @@ export const OPEN_STRINGS: ChromaticNote[] = ['E', 'B', 'G', 'D', 'A', 'E'];
 export const STRING_NUMBERS = [1, 2, 3, 4, 5, 6];
 
 // Frets with position markers
-export const SINGLE_MARKER_FRETS = new Set([3, 5, 7, 9]);
-export const DOUBLE_MARKER_FRETS = new Set([12]);
+export const SINGLE_MARKER_FRETS = new Set([3, 5, 7, 9, 15, 17, 19, 21]);
+export const DOUBLE_MARKER_FRETS = new Set([12, 24]);
 
-export const TOTAL_FRETS = 12;
+export const TOTAL_FRETS = 24;
 
 export function getNoteAtFret(stringIdx: number, fret: number): ChromaticNote {
   const openNote = OPEN_STRINGS[stringIdx];

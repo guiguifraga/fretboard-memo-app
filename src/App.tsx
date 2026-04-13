@@ -53,7 +53,7 @@ export default function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Standard tuning · E A D G B E · 12 frets</p>
+        <p>Standard tuning · E A D G B E · 24 frets</p>
       </footer>
     </div>
   );
