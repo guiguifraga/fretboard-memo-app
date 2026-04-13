@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { IdentifyNote } from './exercises/IdentifyNote';
 import { FindNote } from './exercises/FindNote';
 import { NoteExplorer } from './exercises/NoteExplorer';
@@ -64,7 +64,7 @@ export default function App() {
 
       <footer className="app-footer">
         <p>
-          {currentPreset ? currentPreset.name : 'Custom'} · {tuningDisplay} · 24 frets
+          {currentPreset ? currentPreset.name : 'Custom'} · {tuningDisplay} · 24 frets  ·  by Guilherme Fraga
         </p>
       </footer>
     </div>
