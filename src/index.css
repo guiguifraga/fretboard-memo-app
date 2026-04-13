@@ -513,17 +513,16 @@ body {
 
 /* ─── Fretboard ─────────────────────────────────────────────────── */
 .fretboard-scroll {
-  overflow-x: auto;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
 }
 
 .fretboard {
   display: table;
+  width: 100%;
   background: var(--fretboard-bg);
   border-radius: var(--radius-lg);
   padding: 12px 0;
-  min-width: 800px;
 }
 
 /* Each row uses display:flex */
@@ -551,7 +550,6 @@ body {
 /* Generic cell */
 .fb-cell {
   flex: 1;
-  min-width: 56px;
   height: 48px;
   display: flex;
   align-items: center;
@@ -561,8 +559,6 @@ body {
 
 /* Open string column is narrower */
 .fb-open-col {
-  min-width: 52px;
-  max-width: 60px;
   border-right: 4px solid var(--nut-color);
 }
 
