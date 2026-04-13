@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Fretboard, NoteHighlight } from '../components/Fretboard';
 import {
   CHROMATIC_NOTES,
   ChromaticNote,
   getNoteAtFret,
   getRandomPosition,
+  Tuning,
 } from '../data/notes';
 
 interface Question {
@@ -15,24 +16,31 @@ interface Question {
 
 type FeedbackState = 'idle' | 'correct' | 'wrong';
 
-function newQuestion(): Question {
+function makeQuestion(tuning: Tuning): Question {
   const pos = getRandomPosition();
-  return {
-    ...pos,
-    answer: getNoteAtFret(pos.string, pos.fret),
-  };
+  return { ...pos, answer: getNoteAtFret(pos.string, pos.fret, tuning) };
 }
 
-export const IdentifyNote: React.FC = () => {
-  const [question, setQuestion] = useState<Question>(newQuestion);
+interface Props {
+  tuning: Tuning;
+}
+
+export const IdentifyNote: React.FC<Props> = ({ tuning }) => {
+  const [question, setQuestion] = useState<Question>(() => makeQuestion(tuning));
   const [feedback, setFeedback] = useState<FeedbackState>('idle');
   const [correct, setCorrect] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const advance = useCallback(() => {
-    setQuestion(newQuestion());
+  // Reset when tuning changes
+  useEffect(() => {
+    setQuestion(makeQuestion(tuning));
     setFeedback('idle');
-  }, []);
+  }, [tuning]);
+
+  const advance = useCallback(() => {
+    setQuestion(makeQuestion(tuning));
+    setFeedback('idle');
+  }, [tuning]);
 
   const handleGuess = useCallback(
     (note: ChromaticNote) => {
@@ -81,7 +89,7 @@ export const IdentifyNote: React.FC = () => {
         {feedback === 'idle' && '\u00a0'}
       </div>
 
-      <Fretboard highlights={highlights} />
+      <Fretboard highlights={highlights} tuning={tuning} />
 
       <div className="note-grid">
         {CHROMATIC_NOTES.map((note) => (

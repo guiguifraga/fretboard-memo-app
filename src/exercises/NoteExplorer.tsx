@@ -4,14 +4,19 @@ import {
   CHROMATIC_NOTES,
   ChromaticNote,
   getAllPositionsOfNote,
+  Tuning,
 } from '../data/notes';
 
-export const NoteExplorer: React.FC = () => {
+interface Props {
+  tuning: Tuning;
+}
+
+export const NoteExplorer: React.FC<Props> = ({ tuning }) => {
   const [selected, setSelected] = useState<ChromaticNote | null>(null);
 
   const highlights: NoteHighlight[] =
     selected !== null
-      ? getAllPositionsOfNote(selected).map((pos) => ({
+      ? getAllPositionsOfNote(selected, tuning).map((pos) => ({
           string: pos.string,
           fret: pos.fret,
           color: '#3b82f6',
@@ -43,11 +48,11 @@ export const NoteExplorer: React.FC = () => {
       {selected && (
         <p className="explorer-info">
           <strong>{selected}</strong> appears{' '}
-          {getAllPositionsOfNote(selected).length} times in the first 12 frets
+          {getAllPositionsOfNote(selected, tuning).length} times across all frets
         </p>
       )}
 
-      <Fretboard highlights={highlights} />
+      <Fretboard highlights={highlights} tuning={tuning} />
     </div>
   );
 };

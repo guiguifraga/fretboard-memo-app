@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Fretboard, NoteHighlight } from '../components/Fretboard';
 import {
   ChromaticNote,
   getNoteAtFret,
   getAllPositionsOfNote,
   getRandomNote,
+  Tuning,
 } from '../data/notes';
 
 type FeedbackState = 'idle' | 'correct' | 'wrong';
@@ -15,12 +16,23 @@ interface ClickResult {
   correct: boolean;
 }
 
-export const FindNote: React.FC = () => {
+interface Props {
+  tuning: Tuning;
+}
+
+export const FindNote: React.FC<Props> = ({ tuning }) => {
   const [targetNote, setTargetNote] = useState<ChromaticNote>(getRandomNote);
   const [lastClick, setLastClick] = useState<ClickResult | null>(null);
   const [feedback, setFeedback] = useState<FeedbackState>('idle');
   const [correct, setCorrect] = useState(0);
   const [total, setTotal] = useState(0);
+
+  // Reset when tuning changes
+  useEffect(() => {
+    setTargetNote(getRandomNote());
+    setLastClick(null);
+    setFeedback('idle');
+  }, [tuning]);
 
   const advance = useCallback(() => {
     setTargetNote(getRandomNote());
@@ -32,7 +44,7 @@ export const FindNote: React.FC = () => {
     (str: number, fret: number) => {
       if (feedback !== 'idle') return;
 
-      const clickedNote = getNoteAtFret(str, fret);
+      const clickedNote = getNoteAtFret(str, fret, tuning);
       const isCorrect = clickedNote === targetNote;
 
       setLastClick({ string: str, fret, correct: isCorrect });
@@ -41,24 +53,21 @@ export const FindNote: React.FC = () => {
       if (isCorrect) setCorrect((c) => c + 1);
 
       if (isCorrect) {
-        // show all correct positions briefly, then advance
         setTimeout(advance, 1600);
       } else {
-        // clear wrong highlight and let user try again
         setTimeout(() => {
           setLastClick(null);
           setFeedback('idle');
         }, 900);
       }
     },
-    [feedback, targetNote, advance],
+    [feedback, targetNote, advance, tuning],
   );
 
   const highlights: NoteHighlight[] = [];
 
   if (feedback === 'correct' && lastClick) {
-    // Show all correct positions
-    getAllPositionsOfNote(targetNote).forEach((pos) => {
+    getAllPositionsOfNote(targetNote, tuning).forEach((pos) => {
       highlights.push({
         string: pos.string,
         fret: pos.fret,
@@ -71,7 +80,7 @@ export const FindNote: React.FC = () => {
       string: lastClick.string,
       fret: lastClick.fret,
       color: '#ef4444',
-      label: getNoteAtFret(lastClick.string, lastClick.fret),
+      label: getNoteAtFret(lastClick.string, lastClick.fret, tuning),
     });
   }
 
@@ -102,6 +111,7 @@ export const FindNote: React.FC = () => {
         highlights={highlights}
         onFretClick={handleFretClick}
         interactive
+        tuning={tuning}
       />
     </div>
   );

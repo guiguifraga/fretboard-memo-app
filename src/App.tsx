@@ -3,6 +3,8 @@ import { IdentifyNote } from './exercises/IdentifyNote';
 import { FindNote } from './exercises/FindNote';
 import { NoteExplorer } from './exercises/NoteExplorer';
 import { ScaleExplorer } from './exercises/ScaleExplorer';
+import { TuningSelector } from './components/TuningSelector';
+import { STANDARD_TUNING, TUNING_PRESETS, Tuning } from './data/notes';
 
 type Tab = 'identify' | 'find' | 'explore' | 'scale';
 
@@ -21,6 +23,13 @@ const TABS: TabDef[] = [
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('identify');
+  const [tuning, setTuning] = useState<Tuning>([...STANDARD_TUNING]);
+
+  const currentPreset = TUNING_PRESETS.find((p) =>
+    p.tuning.every((n, i) => n === tuning[i]),
+  );
+  // Display tuning from low (6th) to high (1st), conventional notation
+  const tuningDisplay = [...tuning].reverse().join(' ');
 
   return (
     <div className="app">
@@ -43,17 +52,20 @@ export default function App() {
             ))}
           </nav>
         </div>
+        <TuningSelector tuning={tuning} onChange={setTuning} />
       </header>
 
       <main className="app-main">
-        {activeTab === 'identify' && <IdentifyNote />}
-        {activeTab === 'find' && <FindNote />}
-        {activeTab === 'explore' && <NoteExplorer />}
-        {activeTab === 'scale' && <ScaleExplorer />}
+        {activeTab === 'identify' && <IdentifyNote tuning={tuning} />}
+        {activeTab === 'find' && <FindNote tuning={tuning} />}
+        {activeTab === 'explore' && <NoteExplorer tuning={tuning} />}
+        {activeTab === 'scale' && <ScaleExplorer tuning={tuning} />}
       </main>
 
       <footer className="app-footer">
-        <p>Standard tuning · E A D G B E · 24 frets</p>
+        <p>
+          {currentPreset ? currentPreset.name : 'Custom'} · {tuningDisplay} · 24 frets
+        </p>
       </footer>
     </div>
   );

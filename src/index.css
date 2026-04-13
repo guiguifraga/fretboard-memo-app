@@ -415,6 +415,102 @@ body {
   color: var(--text-muted);
 }
 
+/* ─── Tuning bar ────────────────────────────────────────────────── */
+.tuning-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tuning-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-subtle);
+  white-space: nowrap;
+}
+
+.tuning-presets {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tuning-preset-btn {
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.tuning-preset-btn:hover {
+  color: var(--text);
+  background: var(--bg-surface);
+}
+
+.tuning-preset-btn--active {
+  background: var(--bg-surface);
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.tuning-strings {
+  display: flex;
+  gap: 5px;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.tuning-string {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.tuning-string-num {
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  letter-spacing: 0.05em;
+}
+
+.tuning-string-select {
+  width: 42px;
+  padding: 3px 2px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--string-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.tuning-string-select:hover {
+  border-color: var(--text-muted);
+}
+
+.tuning-string-select:focus {
+  outline: none;
+  border-color: var(--text-muted);
+}
+
 /* ─── Fretboard ─────────────────────────────────────────────────── */
 .fretboard-scroll {
   overflow-x: auto;

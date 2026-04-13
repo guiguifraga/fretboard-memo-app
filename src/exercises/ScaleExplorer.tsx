@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Fretboard, NoteHighlight } from '../components/Fretboard';
-import { CHROMATIC_NOTES, ChromaticNote, getNoteAtFret, TOTAL_FRETS, OPEN_STRINGS } from '../data/notes';
+import { CHROMATIC_NOTES, ChromaticNote, getNoteAtFret, TOTAL_FRETS, Tuning } from '../data/notes';
 import {
   SCALES,
   Scale,
@@ -13,7 +13,11 @@ import {
 type Category = Scale['category'] | 'All';
 const CATEGORIES: Category[] = ['All', 'Modes', 'Pentatonic', 'Other'];
 
-export const ScaleExplorer: React.FC = () => {
+interface Props {
+  tuning: Tuning;
+}
+
+export const ScaleExplorer: React.FC<Props> = ({ tuning }) => {
   const [root, setRoot] = useState<ChromaticNote>('C');
   const [scaleId, setScaleId] = useState<string>('major');
   const [activeCategory, setActiveCategory] = useState<Category>('All');
@@ -27,9 +31,9 @@ export const ScaleExplorer: React.FC = () => {
       : SCALES.filter((s) => s.category === activeCategory);
 
   const highlights: NoteHighlight[] = [];
-  for (let str = 0; str < OPEN_STRINGS.length; str++) {
+  for (let str = 0; str < tuning.length; str++) {
     for (let fret = 0; fret <= TOTAL_FRETS; fret++) {
-      const note = getNoteAtFret(str, fret);
+      const note = getNoteAtFret(str, fret, tuning);
       const degreeIdx = getScaleDegreeIndex(root, note, scale);
       if (degreeIdx !== -1) {
         highlights.push({
@@ -109,7 +113,7 @@ export const ScaleExplorer: React.FC = () => {
         </span>
       </div>
 
-      <Fretboard highlights={highlights} />
+      <Fretboard highlights={highlights} tuning={tuning} />
 
       {/* Degree legend */}
       <div className="degree-legend">

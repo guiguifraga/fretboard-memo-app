@@ -1,10 +1,11 @@
 import React from 'react';
 import {
   getNoteAtFret,
-  OPEN_STRINGS,
+  STANDARD_TUNING,
   TOTAL_FRETS,
   SINGLE_MARKER_FRETS,
   DOUBLE_MARKER_FRETS,
+  Tuning,
 } from '../data/notes';
 
 export interface NoteHighlight {
@@ -20,6 +21,7 @@ interface FretboardProps {
   onFretClick?: (string: number, fret: number) => void;
   interactive?: boolean;
   showAllNotes?: boolean;
+  tuning?: Tuning;
 }
 
 const FRETS = Array.from({ length: TOTAL_FRETS + 1 }, (_, i) => i);
@@ -32,6 +34,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
   onFretClick,
   interactive = false,
   showAllNotes = false,
+  tuning = STANDARD_TUNING,
 }) => {
   const getHighlight = (s: number, f: number) =>
     highlights.find((h) => h.string === s && h.fret === f);
@@ -68,7 +71,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
         </div>
 
         {/* String rows */}
-        {OPEN_STRINGS.map((_, stringIdx) => (
+        {tuning.map((_, stringIdx) => (
           <div key={stringIdx} className="fb-row fb-string-row">
             {/* String number label */}
             <div className="fb-string-label">
@@ -78,7 +81,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
             {/* Fret cells */}
             {FRETS.map((fret) => {
               const highlight = getHighlight(stringIdx, fret);
-              const note = getNoteAtFret(stringIdx, fret);
+              const note = getNoteAtFret(stringIdx, fret, tuning);
               const isClickable = interactive && !!onFretClick;
 
               let circleStyle: React.CSSProperties = {};
@@ -103,7 +106,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
                     fret === 0 ? 'fb-open-col' : '',
                     isClickable ? 'fb-fret-cell--clickable' : '',
                     stringIdx === 0 ? 'fb-first-string' : '',
-                    stringIdx === OPEN_STRINGS.length - 1 ? 'fb-last-string' : '',
+                    stringIdx === tuning.length - 1 ? 'fb-last-string' : '',
                   ]
                     .filter(Boolean)
                     .join(' ')}
