@@ -56,6 +56,7 @@ export function getAllPositionsOfNote(
       if (getNoteAtFret(s, f, tuning) === note) {
         positions.push({ string: s, fret: f });
       }
+      
     }
   }
   return positions;
